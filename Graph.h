@@ -6,10 +6,10 @@ using std::vector;
 
 struct Edge
 {
-    //边
+    //边集
 public:
-    int s_v ;
-    int e_v ;
+    int s_v;
+    int e_v;
     int weight;
 };
 
@@ -26,19 +26,16 @@ private:
 
 public:
     Graph() = default;
-    ~Graph();	
-    void genEedges(); 
-    
+    ~Graph();
+    void genEedges();
+
     //将邻接矩阵转换为边集
-    void createGraph();  
-    void Recursive_InsertionSort(vector<Edge> &reference, int nrOfArray);
-    void insert(vector<Edge> &reference, int nrOfArray);
+    void createGraph();
     int init();
     void FindSpanningTree();  //生成最小生成树
     long GetMinimumCost();  //计算最小生成树的权重
     vector<Edge> covMinimunSpanningTree();
 };
-
 
 
 #endif // !GRAPH_H

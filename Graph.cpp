@@ -1,7 +1,11 @@
 ﻿#include "Graph.h"
 #include <iostream>
+#include <algorithm>
 #include <vector>
-
+static bool  compareEdgeWeight(Edge e1, Edge e2)
+{
+    return e1.weight < e2.weight;
+}
 
 Graph::~Graph()
 {
@@ -14,7 +18,7 @@ Graph::~Graph()
 
 void Graph::genEedges()
 {
-    
+
     int k = 0;
     for (int i = 0; i<vertexs; i++)
     {
@@ -22,7 +26,7 @@ void Graph::genEedges()
         {
             if (this->graph[i][j] > 0)
             {
-                edges.push_back(Edge{i,j,graph[i][j]});
+                edges.push_back(Edge{ i,j,graph[i][j] });
                 k++;
             }
         }
@@ -31,7 +35,7 @@ void Graph::genEedges()
 
 void Graph::createGraph()   //生成邻接矩阵
 {
-    
+
     std::cout << "Input the number of vertex: ";
     std::cin >> this->vertexs;
 
@@ -64,7 +68,7 @@ void Graph::createGraph()   //生成邻接矩阵
 
 int Graph::init()     //将边集以从小到大的顺序排列，再初始化并查集   
 {
-    Recursive_InsertionSort(edges, edges.size());
+    std::sort(edges.begin(), edges.end(), compareEdgeWeight);
     this->unionFind = UnionFind();
     std::vector<UnionFind::Node*> nodes;
     for (int i = 0; i < this->vertexs; i++)
@@ -82,11 +86,11 @@ int Graph::init()     //将边集以从小到大的顺序排列，再初始化�
 void Graph::FindSpanningTree()
 {
     init();
-    for (auto it = this->edges.begin(); it != this->edges.end(); it++) 
-    //遍历边集，选出权重最小的边（边集已排好序） 
+    for (auto it = this->edges.begin(); it != this->edges.end(); it++)
+        //遍历边集，选出权重最小的边（边集已排好序） 
     {
-        UnionFind::Node* u = unionFind.Nodes[it->s_v]; 
-        UnionFind::Node* v = unionFind.Nodes[it->e_v];  
+        UnionFind::Node* u = unionFind.Nodes[it->s_v];
+        UnionFind::Node* v = unionFind.Nodes[it->e_v];
 
         if (unionFind.Find(u) != unionFind.Find(v))     //判断路起始点和终点是否相同，不相同则代表在不同的连通分支中，把边加入树中
         {
@@ -116,30 +120,4 @@ long Graph::GetMinimumCost()  //计算最小生成树的权重
 vector<Edge> Graph::covMinimunSpanningTree()
 {
     return this->MinimumSpanningTree;
-}
-
-
-
-void Graph::Recursive_InsertionSort(vector<Edge> &reference, int nrOfArray)
-{
-    if (nrOfArray > 0)
-    {
-        Recursive_InsertionSort(reference, nrOfArray - 1);
-        insert(reference, nrOfArray);
-    }
-    else
-        return;
-}
-
-
-void Graph::insert(vector<Edge> &reference, int nrOfArray)
-{
-    int key = reference[nrOfArray - 1].weight;
-    int i = nrOfArray - 2;
-    while (i >= 0 && key < reference[i].weight)
-    {
-        reference[i + 1] = reference[i];
-        i--;
-    }
-    reference[i + 1].weight = key;
 }

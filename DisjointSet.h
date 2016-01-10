@@ -1,7 +1,8 @@
-#ifndef DISJOINTSET_H
+﻿#ifndef DISJOINTSET_H
 #define DISJOINTSET_H
-#include <vector>
 
+#include <vector>
+#include <map>
 
 class UnionFind
 {
