@@ -1,11 +1,7 @@
-#include "Graph.h"
+﻿#include "Graph.h"
 #include <iostream>
-#include <algorithm>
 #include <vector>
-static bool  compareEdgeWeight(Edge e1, Edge e2)
-{
-    return e1.weight < e2.weight;
-}
+
 
 Graph::~Graph()
 {
@@ -68,7 +64,7 @@ void Graph::createGraph()   //生成邻接矩阵
 
 int Graph::init()     //将边集以从小到大的顺序排列，再初始化并查集   
 {
-    std::sort(edges.begin(), edges.end(), compareEdgeWeight);
+    Recursive_InsertionSort(edges, edges.size());
     this->unionFind = UnionFind();
     std::vector<UnionFind::Node*> nodes;
     for (int i = 0; i < this->vertexs; i++)
@@ -120,4 +116,30 @@ long Graph::GetMinimumCost()  //计算最小生成树的权重
 vector<Edge> Graph::covMinimunSpanningTree()
 {
     return this->MinimumSpanningTree;
+}
+
+
+
+void Graph::Recursive_InsertionSort(vector<Edge> &reference, int nrOfArray)
+{
+    if (nrOfArray > 0)
+    {
+        Recursive_InsertionSort(reference, nrOfArray - 1);
+        insert(reference, nrOfArray);
+    }
+    else
+        return;
+}
+
+
+void Graph::insert(vector<Edge> &reference, int nrOfArray)
+{
+    int key = reference[nrOfArray - 1].weight;
+    int i = nrOfArray - 2;
+    while (i >= 0 && key < reference[i].weight)
+    {
+        reference[i + 1] = reference[i];
+        i--;
+    }
+    reference[i + 1].weight = key;
 }
